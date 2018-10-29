@@ -1,0 +1,25 @@
+clear all;
+close all;
+
+
+A=imread('kick1.jpg');%change the name of image
+
+%we dont have to convert rgb image because the functions
+%that we will use support the rgb images
+
+Facedetect=vision.CascadeObjectDetector();
+
+facess=step(Facedetect,A);%ýt takes object and the image as arguments
+%Create Facedetect object
+
+B=insertObjectAnnotation(A,'rectangle',facess,'face','FontSize',10);
+%insertObjectAnnotation attach annotation
+
+imshow(B),title('Detected Face or Faces');
+
+
+n=size(facess,1);
+strn=num2str(n);
+str=strcat('number of detected face is =', strn);
+disp(str)
+

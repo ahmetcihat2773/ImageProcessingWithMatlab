@@ -1,0 +1,39 @@
+clear all;
+close all;
+
+object=vision.VideoFileReader('videee.mp4');
+
+%write the name of video that you want to find the
+%faces in this video.Try to be sure that your video
+%and this program is in the same file
+
+Facedetect=vision.CascadeObjectDetector();
+
+  writeobj=VideoWriter('Ytbe');
+
+    S=info(object);
+
+      framerate=S.VideoFrameRate;
+
+        VideoWriter.FrameRate=framerate;
+
+open(writeobj);
+
+%we will write a new video in which faces are detected.
+
+figure(2);
+
+while ~isDone(object)
+
+    frame=step(object);
+  
+      facess=step(Facedetect,frame);
+
+         B=insertObjectAnnotation(frame,'rectangle',facess,'Face');
+
+             writeVideo(writeobj,B);
+   
+  
+end
+
+    close(writeobj);

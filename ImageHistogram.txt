@@ -1,0 +1,29 @@
+clear all;
+close all;
+%Image Histogram
+%it is representation of the brightness
+%distribution 
+A=imread('kick1.jpg');
+%To see the histogram convert rgb image
+% to gray .
+    Agray=rgb2gray(A);
+    imhist(Agray);
+    ylabel('Pixels');
+%imhist function shows us in x axes the brightness
+%and y axes the number of pixels which has that much
+%brightness
+   
+
+
+%If you want to see the brightness of red blue and
+%green channels you can separate them and apply same
+%principle.
+
+R=A(:,:,1);
+G=A(:,:,2);
+B=A(:,:,3);
+
+figure(5);
+    subplot(131) , imhist(R),  title('R'),ylabel('Pixels');
+    subplot(132) , imhist(G) , title('G'),ylabel('Pixels');
+    subplot(133) , imhist(B)  ,title('B'),ylabel('Pixels');

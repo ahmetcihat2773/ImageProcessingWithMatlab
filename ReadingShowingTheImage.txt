@@ -1,0 +1,13 @@
+ %Reading and showing the image
+  
+
+% To take an image imread is used.
+%We take an rgb image and to show this
+% image you can use imshow(the image that you want to show) function
+%To take an image your program and the image have to
+% be in the same file.
+  
+A=imread('image.png');
+imshow(A);
+
+%You can use your own images to try it.

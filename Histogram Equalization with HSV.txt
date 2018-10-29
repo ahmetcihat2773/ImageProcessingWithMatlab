@@ -1,0 +1,26 @@
+clear all;
+close all;
+clc;
+A=imread('yourimage.type');%fill here
+
+% Convert to HSV
+
+Ahsv=rgb2hsv(A);
+
+% Since hsv include information about brightness
+%in the third channel, we will take the third channel and perform
+%equalization and we will see how this affect the image itself
+
+Abright=Ahsv(:,:,3);
+
+    Aeqbright=histeq(Abright);
+    Ahsv(:,:,3)=Aeqbright;
+    Anew=hsv2rgb(Ahsv);
+    figure(3);
+    subplot(121)
+    imshow(A) ,title('original image');
+    subplot(122)
+    imshow(Anew),title('After Equalization');
+
+
+

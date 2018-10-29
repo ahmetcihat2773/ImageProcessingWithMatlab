@@ -1,0 +1,18 @@
+close all;
+clear all;
+
+A=imread('nameofyourimage.typeofimage');
+%I recommend you to put your image in the same
+%file which you save your code.
+
+A_gri=rgb2gray(A);
+%rgb2gray() function is convert an rgb image to
+%gray scale.
+
+figure(1);
+subplot(211);
+imshow(A_gri);
+title('Gray Image');
+subplot(212);
+imshow(A);
+title('RGB Image');

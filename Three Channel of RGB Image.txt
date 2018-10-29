@@ -1,0 +1,31 @@
+clear all;
+close all;
+%Here we will learn how to seperate the
+%red blue and green part of a image
+%by using just simple array operation.
+ A=imread('kick1.jpg');
+ Red=A(:,:,1);
+ Green=A(:,:,2);
+ Blue=A(:,:,3);
+ %rgb image has three channel in Matlab first channel
+ %carries the red part of image second channel carries
+ %the green part of image and third carries
+ %the blue part of it.
+   
+ figure(1);
+ 
+   subplot(221)
+   imshow(A);
+   title('Original Image');
+  
+   subplot(222)
+   imshow(Red);
+   title('Red First Channel of Original Image');
+  
+   subplot(223) 
+   imshow(Green);
+   title('Green ,Second Channel of Original Image');
+  
+   subplot(224)
+   imshow(Blue);
+   title('Blue Third Channel of Original Image');

@@ -1,0 +1,58 @@
+clear all;
+close all;
+clc;
+
+readobj=vision.VideoFileReader('harry.mp4');
+%To activate the reading
+%vision.VideoFileReader('name of video') is used
+%creating an object to read.
+writeobj=VideoWriter('PieceofHarry');
+%To active writing VideoWriter('new name you will give')
+%Actually with this two command we create
+%object to write on that object.
+S=info(readobj)%it is used to learn the
+%information about that object
+framerate=S.VideoFrameRate;
+%it is like in C language to access a part of
+% structure dot(.) is used and here is same
+VideoWriter.FrameRate=framerate;
+%Frame rate
+%(expressed in frames per second or fps)
+% frame rate may also be called the
+% frame frequency, and be expressed in hertz.
+open(writeobj);
+%To write a video we have to open the object with
+% open() function
+
+for i=0:2700;
+    %I will take 2700 frame of video and write it
+    %in a new writeobject which we create in line 9
+frame=step(readobj);
+writeVideo(writeobj,frame);
+%writeVideo(the palce that frames will be written,frame that you want it to
+%be writen)
+  
+  
+end
+
+close(writeobj);
+%after writing we have to close it.
+
+%Now lets see what we write.To do this we have to
+%create a reader object by following code.
+objred=vision.VideoFileReader('PieceofHarry.avi');
+
+figure(1);
+while ~isDone(objred)
+    % ýf you do not know what is isDone() function
+    %you can check reading video post.
+%Untill last frame of video let me see the frames
+   frametwo=step(objred);
+   imshow(frametwo);
+  
+  
+  
+end
+
+release(objred);
+release(readobj);

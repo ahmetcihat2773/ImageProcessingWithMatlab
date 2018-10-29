@@ -1,0 +1,35 @@
+object=vision.VideoFileReader('yourvideo.type');%like
+% video.mp4
+
+
+
+
+%info gives informatin about video
+%such as Audiosamplerate
+%Videoframerate or videosize
+
+%step()function gives a picture or it gives
+%a frame of video ,and to see whole video
+%I will use while loop to see all frames of video.
+
+%isDone function return 1 for last frame of
+%video and 0 otherwise.
+bilgi=info(object)
+
+
+
+
+imshow(step(object));
+%imshow() function shows a frame
+%with step() function it shows first frame of object
+
+while ~isDone(object)%untill last frame of video
+    %while loop will work
+
+    frame=step(object);%% Taking the next frame of
+    %video and showing by imshow() function
+    imshow(frame);% frameler görüntüleniyor.
+   
+end
+release(object);%Object can not be used with any
+%funtion after this line

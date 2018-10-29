@@ -1,0 +1,22 @@
+%//////////////////CONNECTÝNG WEBCAM//////////////////
+clear
+
+
+cam=webcam();%create an object
+
+preview(cam)%we opened the camera
+
+
+
+
+Facedetect=vision.CascadeObjectDetector();
+
+
+while(1)
+img = snapshot(cam);
+box=step(Facedetect,img);
+B=insertObjectAnnotation(img,'rectangle',box,'face','FontSize',10);
+imshow(B);
+end
+
+closePreview(cam)

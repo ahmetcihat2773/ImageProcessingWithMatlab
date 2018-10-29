@@ -1,0 +1,18 @@
+clear all;
+close all;
+clc;
+%Histogram Equalization is equalling the
+%brightness of all pixels
+%
+A=imread('test1.jpg');
+% Convert into gray scale
+Agray=rgb2gray(A);
+
+
+Ahisteq=histeq(Agray);
+%histeq() function is used for histogam equalization
+   
+subplot(2,2,1), imshow(A), title('original image');
+subplot(2,2,2), imhist(Agray), title('Histogram of Original Image');
+subplot(2,2,3), imshow(Ahisteq),title('After Equalization ');
+subplot(2,2,4), imhist(Ahisteq),title('Histogram Equalized ');

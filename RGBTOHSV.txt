@@ -1,0 +1,52 @@
+clear all;
+close all;
+
+%Now we will change the image color scale
+%from rgb to HSV
+
+Ne=imread('kick1.jpg');
+A_hsv=rgb2hsv(Ne);
+
+%rgb2hsv() function change the scale from rgb to hsv
+%HSV images have three channel like rgb images have.
+%firt channel of HSV image is Hue
+
+%Hue is expressed in degree and
+% Color   Angle
+% Red    0-60
+% Yellow  60-120
+% Green   120-180
+% Cyan   180-240
+% Blue   240-300
+% Magenta 300-360
+
+%Second Channel is Saturation
+%It is amount of gray in color from 0 to 100 percent
+
+%Third channel of HSV Image is Value(or Brightness)
+%It describe the brightness or intensity of color
+%from 0 to 100 percent.In this case 0 is totaly black
+%and 100 is brightest
+
+H=A_hsv(:,:,1);
+S=A_hsv(:,:,2);
+V=A_hsv(:,:,3);
+   
+
+figure(5);
+    subplot(221)
+    imshow(A_hsv);
+    title('hsv image');
+
+
+ subplot(222);
+    imshow(H);
+    title('Hue');
+   
+    subplot(223);
+    imshow(S);
+    title('Saturation');
+   
+    subplot(224);
+    imshow(V);
+    title('Value or Brightness');
