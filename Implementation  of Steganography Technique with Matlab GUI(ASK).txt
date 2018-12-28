@@ -1,0 +1,446 @@
+function varargout = untitled(varargin)
+
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @untitled_OpeningFcn, ...
+                   'gui_OutputFcn',  @untitled_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+
+
+function untitled_OpeningFcn(hObject, eventdata, handles, varargin)
+
+handles.output = hObject;
+
+
+guidata(hObject, handles);
+
+
+
+
+function varargout = untitled_OutputFcn(hObject, eventdata, handles) 
+
+varargout{1} = handles.output;
+
+
+
+function Loadimage_Callback(hObject, eventdata, handles)
+global A;
+
+[filename,pathname]=uigetfile();%Resmi dýþarýdan alacaðýz.
+
+axes(handles.axes1)%Axex bire olacak olanlarý bunun altýna yazýyoruz
+A=imread(filename);
+axes(handles.axes1)
+imshow(A);
+title('Original Message Image');
+
+
+
+function Loadsecret_Callback(hObject, eventdata, handles)
+
+global B
+
+[filename1,pathname1]=uigetfile();
+
+B=imread(filename1);
+axes(handles.axes4)
+imshow(B);
+title('Original Secret Message');
+
+
+
+
+
+function send_Callback(hObject, eventdata, handles)
+global N;
+global modulated;
+global M;
+global A;
+global B;
+global sizeofA;
+global sizeofB;
+global Secretim;
+global Recons;
+global modulasyon;
+global arreveda
+
+uiwait(msgbox({'Please wait','Untill You See The','Process Complated'}));
+    
+
+
+sizeofA=size(A);
+N=12;
+sizeofB=size(B);
+
+Arowred=rowvectoryap(A(:,:,1),sizeofA(1),sizeofA(2));
+
+Arowgreen=rowvectoryap(A(:,:,2),sizeofA(1),sizeofA(2));
+
+Arowblue=rowvectoryap(A(:,:,3),sizeofA(1),sizeofA(2));
+
+
+Browred=rowvectoryap(B(:,:,1),sizeofB(1),sizeofB(2));
+
+Browgreen=rowvectoryap(B(:,:,2),sizeofB(1),sizeofB(2));
+
+Browblue=rowvectoryap(B(:,:,3),sizeofB(1),sizeofB(2));
+
+Ered=gomme(Arowred,Browred,N);
+
+Egreen=gomme(Arowgreen,Browgreen,N);
+
+Eblue=gomme(Arowblue,Browblue,N);
+
+
+Rgray1=matrixyap(Ered,sizeofA(1),sizeofA(2));
+
+Ggray1=matrixyap(Egreen,sizeofA(1),sizeofA(2));
+
+Bgray1=matrixyap(Eblue,sizeofA(1),sizeofA(2));
+
+arreveda=birlestir(Rgray1,Ggray1,Bgray1);
+
+
+
+
+
+sekred=fonk(Ered);
+sekgreen=fonk(Egreen);
+sekblue=fonk(Eblue);
+
+
+Atotal=[sekred sekgreen sekblue];
+
+
+M=2;
+
+
+
+modulated = real(pskmod(Atotal,M));
+
+modulated=awgn(modulated,5);
+
+hgaussian=fspecial('gaussian');
+haverage=fspecial('average');
+
+modulated=imfilter(modulated,hgaussian);
+modulated=imfilter(modulated,hgaussian);
+
+modulasyon=real(pskdemod(modulated,M));
+
+
+
+sayar=1;
+degisken=1
+
+for i=1:length(modulasyon)
+    if degisken==1
+            demodR(sayar)=modulasyon(i);
+            sayar=sayar+1;
+       if(sayar>8*sizeofA(1)*sizeofA(2))
+            degisken=2
+            sayar=1;
+            continue;
+        end 
+    
+    end
+    
+    if degisken==2
+           demodG(sayar)=modulasyon(i);
+            sayar=sayar+1;
+    if(sayar>8*sizeofA(1)*sizeofA(2))
+            degisken=3
+            sayar=1;
+            continue;
+    end 
+    
+    end
+   
+    if degisken==3
+           demodB(sayar)=modulasyon(i);
+            sayar=sayar+1;
+    if(sayar>8*sizeofA(1)*sizeofA(2))
+            degisken=0;
+            
+    end 
+    
+    end
+    
+    
+    
+end
+    
+        
+        
+
+
+Redimgray=binarytogray(demodR);
+
+Greenimgray=binarytogray(demodG);
+
+Blueimgray=binarytogray(demodB);
+
+
+
+
+
+
+Secretr=cikarma(Redimgray,B(:,:,1),N);
+Secretg=cikarma(Greenimgray,B(:,:,2),N);
+Secretb=cikarma(Blueimgray,B(:,:,1),N);
+
+Secretr=matrixyap(Secretr,sizeofB(1),sizeofB(2));
+
+Secretg=matrixyap(Secretg,sizeofB(1),sizeofB(2));
+
+Secretb=matrixyap(Secretb,sizeofB(1),sizeofB(2));
+
+
+Secretim=birlestir(Secretr,Secretg,Secretb);
+
+Secretim=uint8(Secretim);
+
+
+
+Rgray=matrixyap(Redimgray,sizeofA(1),sizeofA(2));
+
+Ggray=matrixyap(Greenimgray,sizeofA(1),sizeofA(2));
+
+Bgray=matrixyap(Blueimgray,sizeofA(1),sizeofA(2));
+
+
+
+
+
+
+
+   Recons=birlestir(Rgray,Ggray,Bgray);
+   Recons=uint8(Recons);
+   msgbox({'Operation Complated','You Can See The Images'});
+
+
+function arrived_Callback(hObject, eventdata, handles)
+  
+global Recons;
+figure(3);
+imshow(Recons);
+title('Received Image');
+
+
+function showarrivedsecrett_Callback(hObject, eventdata, handles)
+global Secretim
+figure(2);
+imshow(Secretim);
+title('Received Secret Image');
+
+
+
+function embedded_Callback(hObject, eventdata, handles)
+global arreveda;
+arreveda=uint8(arreveda);
+    figure(1);
+imshow(arreveda);
+title('Embedded Image');
+    
+
+
+function sonuc=birlestir(A,B,C)
+
+
+sonuc(:,:,1)=A;
+sonuc(:,:,2)=B;
+
+sonuc(:,:,3)=C;
+
+
+
+   
+
+
+
+function sonuc=binarytogray(A)
+
+uzunluk=length(A);
+temp=zeros(1,8);
+Atemp=zeros(1,round(length(A)/8));
+sayac=1;
+sayac1=1;
+    for i=1:uzunluk
+        
+   temp(sayac1)=A(i);
+     sayac1=sayac1+1;
+                if sayac1>8
+                 Atemp(sayac)=bintodec(temp);
+                    sayac=sayac+1;
+                   sayac1=1;
+                   end   
+        
+        
+    end
+
+sonuc=Atemp;
+
+
+
+
+
+
+
+function sonuc=fonk(A)
+
+
+ degisken1=1; 
+for i=1:length(A)
+   degisken=1;
+  
+   binofA=dectobin(A(i));
+  
+    
+    for degisken=1:8
+        
+      Abin(degisken1)=binofA(degisken);
+        degisken1=degisken1+1;
+        
+    end
+    
+    
+    
+end
+
+
+
+sonuc=Abin;
+
+
+
+
+
+
+
+function sonuc=dectobin(D)
+B = zeros(1,8);
+for k = 8:-1:1
+  B(k) = mod(D,2);
+  D = (D-B(k))/2;
+end
+
+sonuc=B;
+
+
+
+
+
+function sonuc=bintodec(D)
+
+sonuc= sum(D.*(2.^(7:-1:0)));
+
+
+
+
+
+
+
+
+
+
+function sonuc=rowvectoryap(A,i,j)
+tot=i*j;
+k=1;
+B=0;
+for m=1:i
+   for n=1:j
+   B(k)= A(m,n);
+        k=k+1;
+    end
+    
+end
+sonuc=B;
+
+
+
+
+function sonuc=gomme(A,B,N)
+
+
+kontrol=1;
+j=1;
+
+for i=1:length(A)
+
+    if j<=length(B)
+if kontrol==N
+kontrol=0;
+A(i)=B(j);
+ j=j+1;
+    
+end
+    else
+        break;
+    end
+    kontrol=kontrol+1;
+    
+end
+
+sonuc=A;
+
+
+
+
+function sonuc=cikarma(A,B,N)
+
+
+j=1;
+kontrol=1;
+sizeofB=size(B);
+
+for i=1:length(A)
+
+    if j<=sizeofB(1)*sizeofB(2)
+        if kontrol==N
+        kontrol=0;
+        sonuc(j)=A(i);
+        j=j+1;
+    
+        end
+    else
+        break;
+    end
+kontrol=kontrol+1;
+end
+
+
+
+
+
+
+
+function sonuc=matrixyap(A,i,j)
+
+say=1;
+B=zeros(i,j);
+
+for n=1:i
+    for m=1:j
+      B(n,m)=A(say);
+      say=say+1;
+    end
+    
+    
+end
+
+sonuc=B;
+
+
+function pushbutton7_Callback(hObject, eventdata, handles)
+
